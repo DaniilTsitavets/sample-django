@@ -25,7 +25,7 @@ resource "aws_alb_target_group_attachment" "django_app_attachments" {
 resource "aws_lb" "django_alb" {
   name               = "django-alb"
   load_balancer_type = "application"
-  security_groups = [aws_security_group.alb_sg]
+  security_groups = [aws_security_group.alb_sg.id]
   subnets            = aws_subnet.django_public_subnet[*].id
 }
 
