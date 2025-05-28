@@ -63,9 +63,11 @@ resource "aws_internet_gateway" "django_igw" {
 
 resource "aws_eip" "nat_gw_eip" {
   domain = "vpc"
+  depends_on = [aws_internet_gateway.django_igw]
 }
 
 resource "aws_nat_gateway" "django_app_nat_gw" {
   subnet_id     = aws_subnet.django_public_subnet[0].id
   allocation_id = aws_eip.nat_gw_eip.id
+  depends_on = [aws_internet_gateway.django_igw]
 }
