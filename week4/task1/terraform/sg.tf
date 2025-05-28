@@ -22,7 +22,7 @@ resource "aws_security_group" "alb_sg" {
 }
 
 resource "aws_security_group" "ec2_django_app_sg" {
-  name   = "ec2_django_app_sg"
+  name   = "ec2-django-app-sg"
   vpc_id = aws_vpc.django_vpc.id
 
   ingress {
@@ -40,7 +40,7 @@ resource "aws_security_group" "ec2_django_app_sg" {
   }
 
   tags = {
-    Name = "ec2_django_app_sg"
+    Name = "ec2-django-app-sg"
   }
 }
 
@@ -63,6 +63,6 @@ resource "aws_security_group" "ec2_db_sg" {
   }
 
   tags = {
-    Name = "ec2_db_sg"
+    Name = "ec2-db-sg"
   }
 }
