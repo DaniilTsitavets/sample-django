@@ -4,3 +4,7 @@
     name: postgresql
     state: present
     update_cache: true
+
+- name: Ensure python3 is installed
+  raw: test -e /usr/bin/python3 || (apt update && apt install -y python3)
+  changed_when: false
