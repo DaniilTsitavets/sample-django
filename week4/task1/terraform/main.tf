@@ -21,5 +21,5 @@ resource "local_file" "ansible_inventory" {
     app_ips = aws_instance.django_app[*].private_ip
     db_ips  = aws_instance.db[*].private_ip
   })
-  filename = "${path.module}/inventory.ini"
+  filename = "${path.module}/../ansible/hosts"
 }
