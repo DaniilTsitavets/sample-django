@@ -1,0 +1,8 @@
+---
+- name: Install dependencies for deployment
+  apt:
+    name:
+      - libpq-dev
+      - build-essential
+      - git
+    update_cache: true

@@ -1,0 +1,16 @@
+---
+- name: Clone repository
+  git:
+    repo: "{{ django_repo_url }}"
+    dest: "{{ django_project_dir }}"
+    version: "{{ django_branch }}"
+
+- name: Install python deps from requirements.txt
+  pip:
+    requirements: "{{ django_project_dir }}/requirements.txt"
+    virtualenv: "{{ django_project_dir }}/venv"
+
+- name: Apply Django application
+  command: "{{ django_project_dir }}/venv/bin/python manage.py migrate"
+  args:
+    chdir: "{{ django_project_dir }}"

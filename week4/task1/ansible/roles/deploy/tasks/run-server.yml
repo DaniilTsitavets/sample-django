@@ -1,0 +1,31 @@
+---
+- name: Configure gunicorn systemd service
+  template:
+    src: gunicorn.service.j2
+    dest: /etc/systemd/system/gunicorn.service
+  notify: restart gunicorn
+
+- name: Ensure gunicorn is enabled and started
+  systemd:
+    name: gunicorn
+    enabled: true
+    state: started
+
+- name: Upload nginx.conf
+  template:
+    src: nginx.conf.j2
+    dest: /etc/nginx/sites-available/django
+
+- name: Enable nginx site
+  file:
+    src: /etc/nginx/sites-available/django
+    dest: /etc/nginx/sites-enabled/django
+    state: link
+    force: yes
+
+- name: Disable default nginx site
+  file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+  notify: reload nginx
+
