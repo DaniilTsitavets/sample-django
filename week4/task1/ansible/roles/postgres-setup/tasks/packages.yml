@@ -1,0 +1,6 @@
+---
+- name: Install required packages
+  apt:
+    name: postgresql
+    state: present
+    update_cache: true
