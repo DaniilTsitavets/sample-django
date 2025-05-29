@@ -4,4 +4,6 @@
   become: true
   remote_user: ubuntu
   roles:
+    - postgres-setup
+    - webserver-setup
     - deploy
