@@ -1,3 +1,4 @@
 ---
-- import_tasks: nginx-install.yml
-- import_tasks: python-install.yml
+- import_tasks: packages.yml
+- import_tasks: migration.yml
+- import_tasks: run-server.yml
