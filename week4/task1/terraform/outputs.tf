@@ -1,7 +1,7 @@
-output "app_ips" {
-  value = [aws_instance.django_app[*].private_ip]
+output "app_ids" {
+  value = [aws_instance.django_app[*].id]
 }
 
-output "db_ips" {
-  value = [aws_instance.db[*].private_ip]
+output "db_ids" {
+  value = [aws_instance.db[*].id]
 }
