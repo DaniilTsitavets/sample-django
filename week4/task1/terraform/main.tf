@@ -17,9 +17,10 @@ terraform {
 }
 
 resource "local_file" "ansible_inventory" {
-  content  = templatefile("${path.module}/inventory.tpl", {
-    app_ips = aws_instance.django_app[*].private_ip
-    db_ips  = aws_instance.db[*].private_ip
+  content = templatefile("${path.module}/inventory.tpl", {
+    app_ids = aws_instance.django_app[*].id
+    db_ids  = aws_instance.db[*].id
+    region  = var.region
   })
   filename = "${path.module}/../ansible/hosts"
 }
