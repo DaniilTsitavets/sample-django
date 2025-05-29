@@ -1,0 +1,8 @@
+---
+- name: Install Python and its environment
+  apt:
+    name:
+      - python3
+      - python3-pip
+      - python3-venv
+    update_cache: true
