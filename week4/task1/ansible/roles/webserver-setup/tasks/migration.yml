@@ -5,6 +5,11 @@
     dest: "{{ django_project_dir }}"
     version: "{{ django_branch }}"
 
+- name: Ensure virtualenv is installed
+  pip:
+    name: virtualenv
+    executable: pip3
+
 - name: Install python deps from requirements.txt
   pip:
     requirements: "{{ django_project_dir }}/requirements.txt"
