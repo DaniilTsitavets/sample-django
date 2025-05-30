@@ -24,3 +24,11 @@ resource "local_file" "ansible_inventory" {
   })
   filename = "${path.module}/../ansible/hosts"
 }
+
+resource "local_file" "ansible_vars" {
+  content = templatefile("${path.module}/vars.tpl", {
+    vpc_cidr_block=aws_vpc.django_vpc.cidr_block
+    db_host=aws_instance.db[0].private_ip
+  })
+  filename = "${path.module}/../ansible/group_vars/all"
+}
