@@ -5,8 +5,7 @@ After=network.target
 [Service]
 User=www-data
 Group=www-data
-Environment="DATABASE_URL=postgres://postgres:password@10.1.2.42:5432/db"
-Environment="DJANGO_ALLOWED_HOSTS=*"
+EnvironmentFile={{ env_file_path }}
 WorkingDirectory={{ django_project_dir }}
 ExecStart={{ django_project_dir }}/venv/bin/gunicorn mysite.wsgi:application \
 --bind 0.0.0.0:8000 \
