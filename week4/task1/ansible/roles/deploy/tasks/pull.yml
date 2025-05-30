@@ -6,3 +6,6 @@
     dest: "{{ django_project_dir }}"
     force: yes
     update: yes
+  notify:
+    - restart gunicorn
+    - reload nginx
