@@ -1,5 +1,3 @@
 ---
 - import_tasks: packages.yml
-- import_tasks: envs.yml
-- import_tasks: migration.yml
 - import_tasks: run-server.yml
