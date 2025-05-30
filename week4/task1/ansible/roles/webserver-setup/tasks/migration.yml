@@ -19,3 +19,6 @@
   command: "{{ django_project_dir }}/venv/bin/python manage.py migrate"
   args:
     chdir: "{{ django_project_dir }}"
+  environment:
+    DATABASE_URL: "{{ db_url }}"
+##TODO mb move this env var to env file
