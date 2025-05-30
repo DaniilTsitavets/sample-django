@@ -5,3 +5,11 @@ output "app_ids" {
 output "db_ids" {
   value = [aws_instance.db[*].id]
 }
+
+output "db_host" {
+  value = [aws_instance.db[*].private_ip]
+}
+
+output "vpc_cidr_block" {
+  value = aws_vpc.django_vpc.cidr_block
+}
