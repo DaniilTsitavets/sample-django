@@ -4,3 +4,10 @@
     name: postgresql
     state: present
     update_cache: true
+
+- name: Install psycopg2 package
+  become: yes
+  apt:
+    name: python3-psycopg2
+    state: present
+    update_cache: yes
