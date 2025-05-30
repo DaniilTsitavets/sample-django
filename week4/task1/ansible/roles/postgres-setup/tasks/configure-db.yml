@@ -12,7 +12,7 @@
     password: "{{ db_password }}"
     state: present
 
-- name: Create DV
+- name: Create DB
   become_user: postgres
   postgresql_db:
     name: "{{ db_name }}"
