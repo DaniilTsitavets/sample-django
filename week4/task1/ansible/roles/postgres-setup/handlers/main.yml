@@ -1,5 +1,5 @@
 ---
-- name: Restart PostgreSQL 14 main instance
+- name: restart PostgreSQL
   systemd:
     name: postgresql@14-main
     state: restarted
