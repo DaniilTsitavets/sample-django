@@ -3,7 +3,7 @@ module "vpc" {
 
   vpc_cidr_block = "10.0.0.0/16"
   azs = ["eu-north-1a", "eu-north-1b"]
-  public_subnet_cidr_blocks = ["10.0.1.0/24"]
+  public_subnet_cidr_blocks = ["10.0.1.0/24","10.0.2.0/24"]
   private_subnet_cidr_blocks = ["10.0.3.0/24"]
   isolated_subnet_cidr_blocks = ["10.0.5.0/24", "10.0.6.0/24"]
 
@@ -34,12 +34,24 @@ module "rds" {
   depends_on = [module.secrets]
 }
 
+module "iam" {
+  source = "./modules/iam"
+}
+
 module "ec2" {
   source                    = "./modules/ec2"
   ec2_sg                    = module.sg.ec2_sg_id
-  iam_instance_profile_name = ""
+  iam_instance_profile_name = module.iam.iam_instance_profile_name
   private_subnet_id         = module.vpc.private_subnet_ids[0]
   rds_host                  = module.rds.rds_address
 
-  depends_on = [module.rds]
+  depends_on = [module.rds, module.iam]
+}
+
+module "alb" {
+  source = "./modules/alb"
+  alb_sg_id = module.sg.alb_sg_id
+  ec2_instance_ids = module.ec2.ec2_instance_ids
+  public_subnets = module.vpc.public_subnet_ids
+  vpc_id = module.vpc.vpc_id
 }
