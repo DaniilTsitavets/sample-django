@@ -39,6 +39,7 @@ module "ec2" {
   ec2_sg                    = module.sg.ec2_sg_id
   iam_instance_profile_name = ""
   private_subnet_id         = module.vpc.private_subnet_ids[0]
+  rds_host                  = module.rds.rds_address
 
   depends_on = [module.rds]
 }

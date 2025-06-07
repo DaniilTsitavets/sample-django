@@ -6,6 +6,9 @@ resource "aws_instance" "task3_ec2" {
   count                = 1
   security_groups = [var.ec2_sg]
 
+  user_data = templatefile("${path.module}/user_data.sh.tpl", {
+    rds_host = var.rds_host
+  })
 
   tags = {
     Name = "task3-ec2-instance"
