@@ -105,6 +105,15 @@ resource "aws_route_table_association" "private" {
   route_table_id = aws_route_table.private.id
 }
 
+resource "aws_db_subnet_group" "db_subnet_group" {
+  name       = "rds-subnet-group"
+  subnet_ids = [for subnet in aws_subnet.isolated : subnet.id]
+
+  tags = {
+    Name = "task3-rds-subnet-group"
+  }
+}
+
 resource "aws_vpc_endpoint" "s3_gateway" {
   vpc_id            = aws_vpc.task3_vpc.id
   service_name      = "com.amazonaws.${var.region}.s3"
