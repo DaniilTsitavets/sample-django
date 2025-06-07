@@ -7,4 +7,5 @@ module "vpc" {
   private_subnet_cidr_blocks = ["10.0.3.0/24"]
   isolated_subnet_cidr_blocks = ["10.0.5.0/24", "10.0.6.0/24"]
 
+  region = "eu-north-1"
 }

@@ -17,3 +17,7 @@ variable "isolated_subnet_cidr_blocks" {
 variable "private_subnet_cidr_blocks" {
   type = list(string)
 }
+
+variable "region" {
+  type = string
+}
