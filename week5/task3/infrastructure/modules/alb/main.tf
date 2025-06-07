@@ -1,6 +1,6 @@
 resource "aws_alb_target_group" "django_app_tg" {
   name     = "django-app-tg"
-  port     = 8000
+  port     = 80
   protocol = "HTTP"
   vpc_id   = var.vpc_id
 
