@@ -9,3 +9,12 @@ module "vpc" {
 
   region = "eu-north-1"
 }
+
+module "s3" {
+  source = "./modules/s3"
+}
+
+module "sg" {
+  source = "./modules/sg"
+  vpc_id = module.vpc.vpc_id
+}
