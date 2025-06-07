@@ -36,6 +36,7 @@ module "rds" {
 
 module "iam" {
   source = "./modules/iam"
+  bucket_arn = module.s3.bucket_arn
 }
 
 module "ec2" {
@@ -54,4 +55,9 @@ module "alb" {
   ec2_instance_ids = module.ec2.ec2_instance_ids
   public_subnets = module.vpc.public_subnet_ids
   vpc_id = module.vpc.vpc_id
+}
+
+module "waf" {
+  source = "./modules/waf"
+  alb_arn = module.alb.alb_arn
 }
