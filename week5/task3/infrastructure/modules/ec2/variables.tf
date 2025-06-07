@@ -1,6 +1,6 @@
 variable "ami" {
   type = string
-  default = ""
+  default = "ami-04542995864e26699"
 }
 
 variable "instance_type" {
@@ -17,5 +17,9 @@ variable "private_subnet_id" {
 }
 
 variable "ec2_sg" {
+  type = string
+}
+
+variable "rds_host" {
   type = string
 }
