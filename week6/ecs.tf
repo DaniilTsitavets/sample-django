@@ -25,7 +25,6 @@ resource "aws_ecs_task_definition" "sample_django_task_definition" {
       environment = [
         { name = "DB_NAME", value = data.aws_ssm_parameter.db_name.value },
         { name = "DB_USER", value = data.aws_ssm_parameter.db_username.value },
-        { name = "DB_PASSWORD", value = data.aws_ssm_parameter.db_password.value },
         { name = "DB_HOST", value = aws_db_instance.db.address },
         { name = "DB_PORT", value = "5432" },
         { name = "SECRET_KEY", value = data.aws_ssm_parameter.secret_key.value },
@@ -36,6 +35,12 @@ resource "aws_ecs_task_definition" "sample_django_task_definition" {
         {
           name  = "DATABASE_URL",
           value = "postgres://${data.aws_ssm_parameter.db_username.value}:${data.aws_ssm_parameter.db_password.value}@${aws_db_instance.db.address}:5432/${data.aws_ssm_parameter.db_name.value}"
+        }
+      ]
+      secrets = [
+        {
+          name      = "DB_PASSWORD",
+          valueFrom = data.aws_ssm_parameter.db_password.arn
         }
       ]
       logConfiguration = {
@@ -63,17 +68,22 @@ resource "aws_ecs_task_definition" "sample_django_task_definition" {
       environment = [
         { name = "DB_NAME", value = data.aws_ssm_parameter.db_name.value },
         { name = "DB_USER", value = data.aws_ssm_parameter.db_username.value },
-        { name = "DB_PASSWORD", value = data.aws_ssm_parameter.db_password.value },
         { name = "DB_HOST", value = aws_db_instance.db.address },
         { name = "DB_PORT", value = "5432" },
         { name = "SECRET_KEY", value = data.aws_ssm_parameter.secret_key.value },
         {
-          name = "DJANGO_ALLOWED_HOSTS"
+          name  = "DJANGO_ALLOWED_HOSTS"
           value = "*"
         },
         {
           name  = "DATABASE_URL",
           value = "postgres://${data.aws_ssm_parameter.db_username.value}:${data.aws_ssm_parameter.db_password.value}@${aws_db_instance.db.address}:5432/${data.aws_ssm_parameter.db_name.value}"
+        }
+      ]
+      secrets = [
+        {
+          name      = "DB_PASSWORD",
+          valueFrom = data.aws_ssm_parameter.db_password.arn
         }
       ]
       logConfiguration = {
