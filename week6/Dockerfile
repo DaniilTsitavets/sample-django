@@ -24,4 +24,6 @@ RUN mkdir -p /app/staticfiles && chown -R appuser:appuser /app
 
 USER appuser
 
-CMD ["sh", "-c", "python manage.py collectstatic --noinput && gunicorn mysite.wsgi:application --bind 0.0.0.0:8000"]
+RUN python manage.py collectstatic --noinput
+
+CMD ["gunicorn", "mysite.wsgi:application", "--bind", "0.0.0.0:8000"]
