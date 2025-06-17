@@ -1,0 +1,45 @@
+services:
+  db:
+    image: "postgres:15-alpine"
+    container_name: postgresql-db
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: db
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    ports:
+      - "5432:5432"
+#    volumes:
+#      - data:/var/lib/postgresql/data
+    networks:
+      - django-db
+
+  db-migration:
+    build: .
+    container_name: db-migration
+    command: python manage.py migrate
+    environment:
+      DATABASE_URL: postgres://user:password@db:5432/db
+    restart: no
+    depends_on:
+       db:
+         condition: service_healthy
+  web:
+    build: .
+    container_name: sample-django
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgres://user:password@db:5432/db
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db-migration
+    networks:
+      - django-db
+
+networks:
+  django-db:
