@@ -24,10 +24,11 @@ services:
     command: python manage.py migrate
     environment:
       DATABASE_URL: postgres://user:password@db:5432/db
-    restart: no
+    restart: on-failure
     depends_on:
-       db:
-         condition: service_healthy
+      - db
+    networks:
+      - django-db
   web:
     build: .
     container_name: sample-django
