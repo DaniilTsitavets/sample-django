@@ -17,28 +17,17 @@ services:
 #      - data:/var/lib/postgresql/data
     networks:
       - django-db
-
-  db-migration:
-    build: .
-    container_name: db-migration
-    command: python manage.py migrate
-    environment:
-      DATABASE_URL: postgres://user:password@db:5432/db
-    restart: on-failure
-    depends_on:
-      - db
-    networks:
-      - django-db
   web:
     build: .
     container_name: sample-django
     restart: unless-stopped
     environment:
+      POSTGRES_DB: db
       DATABASE_URL: postgres://user:password@db:5432/db
     ports:
       - "8000:8000"
     depends_on:
-      - db-migration
+      - db
     networks:
       - django-db
 
