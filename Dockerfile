@@ -19,6 +19,7 @@ ENV PYTHONUNBUFFERED=1
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libpq5 \
+    netcat-openbsd \
     && rm -rf /var/lib/apt/lists/*
 
 COPY --from=build /usr/local /usr/local
@@ -29,9 +30,11 @@ USER appuser
 WORKDIR /app
 
 COPY --chown=appuser:appuser . /app/
-COPY --chown=appuser:appuser manage.py /app/manage.py
 
 RUN mkdir -p /app/staticfiles && chown appuser:appuser /app/staticfiles
 RUN python manage.py collectstatic --noinput
 
-CMD ["gunicorn", "mysite.wsgi:application", "--bind", "0.0.0.0:8000"]
+COPY --chown=appuser:appuser entrypoint.sh /app/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
+
+CMD ["/app/entrypoint.sh"]
