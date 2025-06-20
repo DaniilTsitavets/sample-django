@@ -7,7 +7,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     && rm -rf /var/lib/apt/lists/*
 
-COPY requirements.txt .
+COPY ../../requirements.txt .
 
 RUN pip install --no-cache-dir --upgrade pip==24.0 \
     && pip install --no-cache-dir -r requirements.txt
@@ -29,7 +29,7 @@ USER appuser
 
 WORKDIR /app
 
-COPY --chown=appuser:appuser . /app/
+COPY --chown=appuser:appuser ../.. /app/
 
 RUN mkdir -p /app/staticfiles && chown appuser:appuser /app/staticfiles
 RUN python manage.py collectstatic --noinput
