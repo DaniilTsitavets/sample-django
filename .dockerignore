@@ -1,0 +1,20 @@
+# Исключаем стандартное
+.git
+.gitignore
+Dockerfile
+*.md
+*.log
+*.env
+node_modules
+venv
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.swp
+*.tmp
+*.bak
+*.DS_Store
+
+week6/
+week8/
