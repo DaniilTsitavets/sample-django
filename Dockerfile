@@ -32,7 +32,6 @@ WORKDIR /app
 COPY --chown=appuser:appuser ../.. /app/
 
 RUN mkdir -p /app/staticfiles && chown appuser:appuser /app/staticfiles
-RUN python manage.py collectstatic --noinput
 
 COPY --chown=appuser:appuser entrypoint.sh /app/entrypoint.sh
 RUN chmod +x /app/entrypoint.sh
