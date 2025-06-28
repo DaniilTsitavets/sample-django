@@ -17,6 +17,9 @@ spec:
       containers:
         - name: {{ include "project.name" . }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: Always
+          securityContext:
+            runAsUser: 0
           ports:
             - containerPort: {{ .Values.containerPort }}
           env:
@@ -35,6 +38,9 @@ spec:
                 secretKeyRef:
                   key: secret-key
                   name: {{ include "project.name" . }}-secret
+          volumeMounts:
+            - name: static-volume
+              mountPath: /app/staticfiles
           readinessProbe:
             httpGet:
               path: /
@@ -52,3 +58,8 @@ spec:
             periodSeconds: 20
             timeoutSeconds: 3
             failureThreshold: 5
+
+      volumes:
+        - name: static-volume
+          persistentVolumeClaim:
+            claimName: {{ include "project.name" . }}-pvc
