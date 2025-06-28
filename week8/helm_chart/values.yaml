@@ -3,12 +3,11 @@ image:
     repository: 913524929706.dkr.ecr.eu-north-1.amazonaws.com/itsyndicate/week8
     tag: latest
 containerPort: 8000
-host: back2.cloud
 certManager:
-    enabled: true
-    email: ex@gmail.com
-    privateKeySecret: letsencrypt-prod
-    clusterIssuerName: letsencrypt-prod
+    enabled: false
+    email: ""
+    privateKeySecret: ""
+    clusterIssuerName: ""
 config:
     allowedHosts: '*'
 secrets:
