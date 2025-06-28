@@ -17,8 +17,7 @@ spec:
       secretName: {{ include "project.name" . }}-tls
   {{- end }}
   rules:
-    - host: {{ .Values.host }}
-      http:
+    - http:
         paths:
           - path: /
             pathType: Prefix
