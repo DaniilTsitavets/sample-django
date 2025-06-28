@@ -37,22 +37,11 @@ spec:
             runAsUser: 0
           ports:
             - containerPort: {{ .Values.containerPort }}
-          env:
-            - name: DJANGO_ALLOWED_HOSTS
-              valueFrom:
-                configMapKeyRef:
-                  name: {{ include "project.name" . }}-configmap
-                  key: allowed-hosts
-            - name: DATABASE_URL
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "project.name" . }}-secret
-                  key: database-url
-            - name: SECRET_KEY
-              valueFrom:
-                secretKeyRef:
-                  key: secret-key
-                  name: {{ include "project.name" . }}-secret
+          envFrom:
+            - secretRef:
+                name: {{ include "project.name" . }}-secret
+            - configMapRef:
+                name: {{ include "project.name" . }}-configmap
           volumeMounts:
             - name: static-volume
               mountPath: /app/staticfiles
