@@ -2,15 +2,26 @@
 
 ## Deployment Steps
 
-1. **Kubernetes Cluster Setup**
-    - Deployed on AWS EKS.
-    - Used EC2 instances as worker nodes.
-    - A total of 4 nodes were used to ensure sufficient capacity, especially for cert-manager components.
-    - Checked pods distribution on nodes with:
-     ```bash
-     kubectl get pods -A -o wide
-     ```
+- **Platform**: AWS Elastic Kubernetes Service (EKS)
+- **OIDC Provider**: Enabled and associated with the EKS cluster:
+- **IRSA (IAM Roles for Service Accounts)**: Configured to securely grant IAM permissions to Kubernetes workloads without using node instance roles.
+- **IAM Roles**:
+- `AmazonEKSClusterPolicy` for EKS control plane role.
+- `AmazonEKSWorkerNodePolicy`, `AmazonEBSCSIDriverPolicy`, and others for node role.
+- Additionally, **IRSA role** (AmazonEKS_EBS_CSI_Driver_IRSA) with `AmazonEBSCSIDriverPolicy` was created for the CSI driver as showed here: [Use Kubernetes volume storage with Amazon EBS](https://docs.aws.amazon.com/eks/latest/userguide/ebs-csi.html).
 
+1. AWS EBS CSI Driver Installation
+- Required the IRSA setup for the CSI driver to authenticate to the EBS API.
+- Installed via Helm using the official AWS EBS CSI Driver chart.
+```bash
+ helm upgrade --install aws-ebs-csi-driver \                       
+  aws-ebs-csi-driver/aws-ebs-csi-driver \
+  --namespace kube-system \
+  --set controller.serviceAccount.create=true \
+  --set controller.serviceAccount.name=ebs-csi-controller-sa \
+  --set controller.serviceAccount.annotations."eks\.amazonaws\.com/role-arn"=arn:aws:iam::<acc_id>:role/AmazonEKS_EBS_CSI_Driver_IRSA
+```
+- Mounted EBS volumes dynamically using PersistentVolumeClaims.
 
 2. **NGINX Ingress Controller Installation**
     - Installed via Helm from the official repo.
@@ -38,54 +49,3 @@
      ```bash
      helmfile apply
      ```
-
-   
-4. **CertManager Setup**
-    - Installed cert-manager using Helm:
-   ```bash
-   helm repo add jetstack https://charts.jetstack.io
-   helm repo update
-   helm install cert-manager jetstack/cert-manager \
-    --namespace cert-manager \
-    --create-namespace \
-    --set installCRDs=true
-   ```
-    - A fourth node was added because the existing three had insufficient resources for cert-manager pods (Too many pods error).
-- Initial Setup Without Domain:
-
-   - ClusterIssuer and certificate templates were included in the Helm chart from the beginning.
-
-   - But, no domain was available initially, so the certificate could not be issued.
-
-   - The chart was deployed without domain-related values
-
-- Domain Configured Later:
-
-   - After a domain (back2.cloud) was obtained, it was added to values.yaml.
-
-   - The chart was redeployed to apply the domain and enable TLS issuance:
-  ```bash
-  helm upgrade --install sample-django ./helm_chart -n default
-  ```
-5. **Deployment with helmfile**
-    - Used `helmfile` to automate Helm releases management and environment deployment.
-
----
-
-
-## Why Kubernetes and Helm?
-
-- **Kubernetes**  
-  Provides automated scaling, self-healing, and declarative management of containerized apps, allowing robust production-grade deployments.
-
-
-- **Helm**  
-  Simplifies managing Kubernetes manifests by templating, parameterization, and packaging.
-
-  Integration with sops provides solution for encrypting secrets, but ESO is anyway better.
-
----
-
-## Notes
-
-- Probes (readiness/liveness) use `/` as endpoint.
