@@ -3,4 +3,4 @@ kind: ConfigMap
 metadata:
   name: {{ include "project.name" . }}-configmap
 data:
-  allowed-hosts: "{{ .Values.config.allowedHosts }}
+  allowed-hosts: "*"
