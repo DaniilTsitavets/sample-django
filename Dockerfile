@@ -24,8 +24,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 COPY --from=build /usr/local /usr/local
 
-RUN adduser --disabled-password --gecos "" appuser
-USER appuser
+RUN adduser --disabled-password --gecos "" --uid 1000 appuser
+
+USER 1000
 
 WORKDIR /app
 
