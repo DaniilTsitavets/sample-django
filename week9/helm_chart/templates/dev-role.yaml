@@ -1,0 +1,24 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: production
+  name: dev-read-secrets
+rules:
+  - apiGroups: [""]
+    resources: ["secrets", "pods"]
+    resourceNames: ["{{ include "project.name" . }}-deployment", "{{ include "project.name" . }}-secret"]
+    verbs: ["get"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: dev-secrets-binding
+  namespace: production
+subjects:
+  - kind: Group
+    name: eks:devs
+    apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: Role
+  name: dev-read-secrets
+  apiGroup: rbac.authorization.k8s.io
