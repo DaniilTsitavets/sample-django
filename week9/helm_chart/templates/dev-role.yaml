@@ -5,9 +5,11 @@ metadata:
   name: dev-read-secrets
 rules:
   - apiGroups: [""]
-    resources: ["secrets", "pods"]
-    resourceNames: ["{{ include "project.name" . }}-deployment", "{{ include "project.name" . }}-secret"]
+    resources: ["secrets"]
     verbs: ["get"]
+  - apiGroups: [ "" ]
+    resources: [ "pods" ]
+    verbs: [ "get", "list", "watch" ]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
