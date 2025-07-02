@@ -16,6 +16,7 @@ spec:
     spec:
       securityContext:
         runAsNonRoot: true
+      serviceAccountName: {{ include "project.name" . }}-sa
       containers:
         - name: {{ include "project.name" . }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
