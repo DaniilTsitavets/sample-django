@@ -14,9 +14,16 @@ spec:
       labels:
         app: {{ include "project.name" . }}
     spec:
+      securityContext:
+        runAsNonRoot: true
       containers:
         - name: {{ include "project.name" . }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
           ports:
             - containerPort: {{ .Values.containerPort }}
           env:
