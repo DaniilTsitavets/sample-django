@@ -25,16 +25,30 @@ spec:
                 configMapKeyRef:
                   name: {{ include "project.name" . }}-configmap
                   key: allowed-hosts
-            - name: DATABASE_URL
+            - name: DB_USERNAME
               valueFrom:
                 secretKeyRef:
                   name: {{ include "project.name" . }}-secret
-                  key: database-url
+                  key: DB_USERNAME
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "project.name" . }}-secret
+                  key: DB_PASSWORD
+            - name: DB_HOST
+              value: "terraform-20250630115458450100000007.c1i0i6eic6ni.eu-north-1.rds.amazonaws.com"
+            - name: DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "project.name" . }}-secret
+                  key: DB_NAME
             - name: SECRET_KEY
               valueFrom:
                 secretKeyRef:
-                  key: secret-key
                   name: {{ include "project.name" . }}-secret
+                  key: SECRET_KEY
+            - name: DATABASE_URL
+              value: "postgres://$(DB_USERNAME):$(DB_PASSWORD)@$(DB_HOST):5432/$(DB_NAME)"
           readinessProbe:
             httpGet:
               path: /
