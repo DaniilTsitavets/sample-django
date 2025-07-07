@@ -4,6 +4,9 @@ image:
     tag: latest
 containerPort: 8000
 host: back2.cloud
+networkPolicy:
+    dbCidr: 10.5.5.5/24 #define
+    dbPort: 5432
 certManager:
     enabled: false
     email: ex@gmail.com
