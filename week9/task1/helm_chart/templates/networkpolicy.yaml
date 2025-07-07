@@ -14,7 +14,7 @@ spec:
     - from:
         - namespaceSelector:
             matchLabels:
-              name: ingress-nginx
+              name: ingress-nginx  # define it with k label ns ingress-nginx name=ingress-nginx
         - podSelector:
             matchLabels:
               app.kubernetes.io/name: ingress-nginx
