@@ -1,0 +1,33 @@
+- name: Create CA private key (4096 bits)
+  community.crypto.openssl_privatekey:
+    path: "{{ certs_certificate_path }}/ca.key"
+    size: 4096
+    type: RSA
+    cipher: "none"
+    mode: "0600"
+
+- name: Create CSR for CA cert (in-memory)
+  community.crypto.openssl_csr_pipe:
+    privatekey_path: "{{ certs_certificate_path }}/ca.key"
+    CN: "CA"
+    C: "LT"
+    ST: "Vilnius"
+    L: "Vilnius"
+    basic_constraints:
+      - CA:TRUE
+    key_usage:
+      - cRLSign
+      - keyCertSign
+    digest: sha512
+    key_usage_critical: true
+  register: csr
+
+- name: Create self-signed CA certificate
+  community.crypto.x509_certificate:
+    path: "{{ certs_certificate_path }}/ca.crt"
+    privatekey_path: "{{ certs_certificate_path }}/ca.key"
+    csr_content: "{{ csr.csr }}"
+    provider: selfsigned
+    selfsigned_not_after: "+3653d"
+    digest: sha512
+    mode: "0600"
