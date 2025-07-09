@@ -7,12 +7,12 @@
 - name: Read and save encoded kube-controller-manager cert content
   ansible.builtin.slurp:
     src: "{{ certificate_path }}/kube-controller-manager.crt"
-  register: node_crt
+  register: kube_controller_manager_crt
 
 - name: Read and save encoded kube-controller-manager key content
   ansible.builtin.slurp:
     src: "{{ certificate_path }}/kube-controller-manager.key"
-  register: node_key
+  register: kube_controller_manager_key
 
 - name: Create kubeconfig for kube-controller-manager
   ansible.builtin.template:
@@ -25,5 +25,5 @@
     k8s_user: system:kube-controller-manager
     cluster_name: "{{ k8s_cluster_name }}"
     context_name: "{{ configs_context_name }}"
-    client_certificate_content: "{{ kube-controller-manager_crt['content'] }}"
-    client_key_content: "{{ kube-controller-manager_key['content'] }}"
+    client_certificate_content: "{{ kube_controller_manager_crt['content'] }}"
+    client_key_content: "{{ kube_controller_manager_key['content'] }}"

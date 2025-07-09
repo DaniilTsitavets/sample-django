@@ -7,12 +7,12 @@
 - name: Read and save encoded kube-scheduler cert content
   ansible.builtin.slurp:
     src: "{{ certificate_path }}/kube-scheduler.crt"
-  register: node_crt
+  register: kube_scheduler_crt
 
 - name: Read and save encoded kube-scheduler key content
   ansible.builtin.slurp:
     src: "{{ certificate_path }}/kube-scheduler.key"
-  register: node_key
+  register: kube_scheduler_key
 
 - name: Create kubeconfig for kube-scheduler
   ansible.builtin.template:
@@ -25,5 +25,5 @@
     k8s_user: system:kube-scheduler
     cluster_name: "{{ k8s_cluster_name }}"
     context_name: "{{ configs_context_name }}"
-    client_certificate_content: "{{ kube-scheduler_crt['content'] }}"
-    client_key_content: "{{ kube-scheduler_key['content'] }}"
+    client_certificate_content: "{{ kube_scheduler_crt['content'] }}"
+    client_key_content: "{{ kube_scheduler_key['content'] }}"

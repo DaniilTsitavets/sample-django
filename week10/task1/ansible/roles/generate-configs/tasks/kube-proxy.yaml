@@ -7,12 +7,12 @@
 - name: Read and save encoded kube-proxy cert content
   ansible.builtin.slurp:
     src: "{{ certificate_path }}/kube-proxy.crt"
-  register: node_crt
+  register: kube_proxy_crt
 
 - name: Read and save encoded kube-proxy key content
   ansible.builtin.slurp:
     src: "{{ certificate_path }}/kube-proxy.key"
-  register: node_key
+  register: kube_proxy_key
 
 - name: Create kubeconfig for kube-proxy
   ansible.builtin.template:
@@ -25,5 +25,5 @@
     k8s_user: system:kube-proxy
     cluster_name: "{{ k8s_cluster_name }}"
     context_name: "{{ configs_context_name }}"
-    client_certificate_content: "{{ kube-proxy_crt['content'] }}"
-    client_key_content: "{{ kube-proxy_key['content'] }}"
+    client_certificate_content: "{{ kube_proxy_crt['content'] }}"
+    client_key_content: "{{ kube_proxy_key['content'] }}"

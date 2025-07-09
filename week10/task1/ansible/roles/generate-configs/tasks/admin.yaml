@@ -7,12 +7,12 @@
 - name: Read and save encoded admin cert content
   ansible.builtin.slurp:
     src: "{{ certificate_path }}/admin.crt"
-  register: node_crt
+  register: admin_crt
 
 - name: Read and save encoded admin key content
   ansible.builtin.slurp:
     src: "{{ certificate_path }}/admin.key"
-  register: node_key
+  register: admin_key
 
 - name: Create kubeconfig for admin
   ansible.builtin.template:
