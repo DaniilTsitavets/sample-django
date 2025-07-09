@@ -18,7 +18,12 @@ variable "ami" {
   default = "ami-04542995864e26699"
 }
 
-variable "instance_type" {
+variable "bastion_instance_type" {
   type = string
   default = "t3.micro"
+}
+
+variable "other_nodes_instance_type" {
+  type = string
+  default = "t3.small"
 }
