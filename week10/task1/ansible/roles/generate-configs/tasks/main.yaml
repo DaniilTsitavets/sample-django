@@ -1,0 +1,10 @@
+---
+- name: Generate nodes kubeconfigs
+  ansible.builtin.include_tasks: nodes.yml
+  vars:
+    node: "{{ item }}"
+  loop: "{{ groups['worker_nodes'] }}"
+- import_tasks: admin.yaml
+- import_tasks: kube-proxy.yaml
+- import_tasks: kube-controller-manager.yaml
+- import_tasks: kube-scheduler.yaml
