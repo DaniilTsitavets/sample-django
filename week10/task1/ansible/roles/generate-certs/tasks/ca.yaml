@@ -10,9 +10,9 @@
   community.crypto.openssl_csr_pipe:
     privatekey_path: "{{ certs_certificate_path }}/ca.key"
     CN: CA
-    C: LT
-    ST: Vilnius
-    L: Vilnius
+    C: "{{ C }}"
+    ST: "{{ ST }}"
+    L: "{{ L }}"
     basic_constraints:
       - CA:TRUE
     key_usage:
