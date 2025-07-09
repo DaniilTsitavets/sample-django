@@ -1,30 +1,21 @@
 ---
-- name: Create /etc/etcd
+- name: Create etcd required directories
   ansible.builtin.file:
-    path: /etc/etcd
+    path: "{{ item.path }}"
     state: directory
-    mode: '0755'
+    mode: "{{ item.mode }}"
+  loop:
+    - { path: /etc/etcd, mode: '0755' }
+    - { path: /var/lib/etcd, mode: '0700' }
+  become: yes
 
-- name: Create /var/lib/etcd
-  ansible.builtin.file:
-    path: /var/lib/etcd
-    state: directory
-    mode: '0700'
-
-- name: Copy CA to /etc/etcd/
+- name: Copy required certs and key to /etc/etcd/
   ansible.builtin.copy:
-    src: "{{ certificate_path }}/ca.crt"
-    dest: /etc/etcd/ca.crt
+    src: "{{ certificate_path }}/{{ item }}"
+    dest: "/etc/etcd/{{ item }}"
     mode: '0644'
-
-- name: Copy kube-api-server.key to /etc/etcd/
-  ansible.builtin.copy:
-    src: "{{ certificate_path }}/kube-api-server.key"
-    dest: /etc/etcd/kube-api-server.key
-    mode: '0644'
-
-- name: Copy kube-api-server.crt to /etc/etcd/
-  ansible.builtin.copy:
-    src: "{{ certificate_path }}/kube-api-server.crt"
-    dest: /etc/etcd/kube-api-server.crt
-    mode: '0644'
+  loop:
+    - ca.crt
+    - kube-api-server.key
+    - kube-api-server.crt
+  become: yes
