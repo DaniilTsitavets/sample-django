@@ -9,10 +9,10 @@
 - name: Create CSR for CA cert (in-memory)
   community.crypto.openssl_csr_pipe:
     privatekey_path: "{{ certs_certificate_path }}/ca.key"
-    CN: "CA"
-    C: "LT"
-    ST: "Vilnius"
-    L: "Vilnius"
+    CN: CA
+    C: LT
+    ST: Vilnius
+    L: Vilnius
     basic_constraints:
       - CA:TRUE
     key_usage:
