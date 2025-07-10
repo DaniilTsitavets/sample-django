@@ -7,7 +7,7 @@
 
 - name: Add kube-apiserver-to-kubelet.yaml
   ansible.builtin.template:
-    src: ../templates/kube-apiserver-to-kubelet.yaml.j2
+    src: kube-apiserver-to-kubelet.yaml.j2
     dest: /tmp
     mode: '0644'
 

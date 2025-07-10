@@ -1,7 +1,7 @@
 ---
 - name: Deploy etcd systemd unit from template
   ansible.builtin.template:
-    src: ../templates/etcd.service.j2
+    src: etcd.service.j2
     dest: /etc/systemd/system/etcd.service
     owner: root
     group: root

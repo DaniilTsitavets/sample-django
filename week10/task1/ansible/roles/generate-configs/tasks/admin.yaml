@@ -16,7 +16,7 @@
 
 - name: Create kubeconfig for admin
   ansible.builtin.template:
-    src: "../templates/kubeconfig.j2"
+    src: kubeconfig.j2
     dest: "{{ configs_files_path }}/admin.kubeconfig"
     mode: '0600'
   vars:

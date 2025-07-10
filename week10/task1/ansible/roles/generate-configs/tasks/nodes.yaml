@@ -16,7 +16,7 @@
 
 - name: "Create kubeconfig for {{ node }}"
   ansible.builtin.template:
-    src: "../templates/kubeconfig.j2"
+    src: kubeconfig.j2
     dest: "{{ configs_files_path }}/{{ node }}.kubeconfig"
     mode: '0600'
   vars:

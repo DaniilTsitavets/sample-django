@@ -17,7 +17,7 @@
 
 - name: Add encryption-config.yaml
   ansible.builtin.template:
-    src: ../templates/encryption-config.yaml.j2
+    src: encryption-config.yaml.j2
     dest: /var/lib/kubernetes/
     mode: '0644'
   vars:
@@ -25,7 +25,7 @@
 
 - name: Add kube-apiserver.service to /etc/systemd/system
   ansible.builtin.template:
-    src: ../templates/kube-apiserver.service.j2
+    src: kube-apiserver.service.j2
     dest: /etc/systemd/system
     owner: root
     group: root
