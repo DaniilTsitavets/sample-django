@@ -6,7 +6,6 @@
     owner: root
     group: root
     mode: '0644'
-  become: true
   loop:
     - ca.key
     - ca.crt
@@ -14,6 +13,7 @@
     - kube-api-server.crt
     - service-accounts.key
     - service-accounts.crt
+  become: true
 
 - name: Add encryption-config.yaml
   ansible.builtin.template:
