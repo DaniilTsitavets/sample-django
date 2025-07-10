@@ -1,12 +1,12 @@
 ---
 - name: Create etcd required directories
   ansible.builtin.file:
-    path: "{{ item.path }}"
+    path: "{{ item }}"
     state: directory
-    mode: "{{ item.mode }}"
+    mode: '0755'
   loop:
-    - { path: /etc/etcd, mode: '0755' }
-    - { path: /var/lib/etcd, mode: '0700' }
+    - /etc/etcd
+    - /var/lib/etcd
   become: yes
 
 - name: Copy required certs and key to /etc/etcd/
