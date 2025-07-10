@@ -1,0 +1,27 @@
+---
+- name: Copy certs to /var/lib/kubernetes/
+  ansible.builtin.copy:
+    src: "{{ certificate_path }}/{{ item }}"
+    dest: "/var/lib/kubernetes/{{ item }}"
+    mode: '0644'
+  loop:
+    - ca.key
+    - ca.crt
+    - kube-api-server.key
+    - kube-api-server.crt
+    - service-accounts.key
+    - service-accounts.crt
+
+- name: Add encryption-config.yaml
+  ansible.builtin.template:
+    src: ../templates/encryption-config.yaml.j2
+    dest: /var/lib/kubernetes/
+    mode: '0644'
+  vars:
+    encryption_key: "{{ lookup('community.general.random_string', length=32, base64=true) }}"
+
+- name: Add kube-apiserver.service to /etc/systemd/system
+  ansible.builtin.template:
+    src: ../templates/kube-apiserver.service.j2
+    dest: /etc/systemd/system
+    mode: '0644'
