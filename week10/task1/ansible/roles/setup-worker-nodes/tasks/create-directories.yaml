@@ -8,7 +8,7 @@
     mode: '0755'
   loop:
     - /etc/cni/net.d
-    - /etc/containerd
+    - /tmp/containerd
     - /opt/cni/bin
     - /var/lib/kubelet
     - /var/lib/kube-proxy
