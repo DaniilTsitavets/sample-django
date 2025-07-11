@@ -18,15 +18,16 @@
 - name: Add encryption-config.yaml
   ansible.builtin.template:
     src: encryption-config.yaml.j2
-    dest: /var/lib/kubernetes/
+    dest: /var/lib/kubernetes/encryption-config.yaml
     mode: '0644'
   vars:
     encryption_key: "{{ lookup('community.general.random_string', length=32, base64=true) }}"
+  become: true
 
 - name: Add kube-apiserver.service to /etc/systemd/system
   ansible.builtin.template:
     src: kube-apiserver.service.j2
-    dest: /etc/systemd/system
+    dest: /etc/systemd/system/kube-apiserver.service
     owner: root
     group: root
     mode: '0644'

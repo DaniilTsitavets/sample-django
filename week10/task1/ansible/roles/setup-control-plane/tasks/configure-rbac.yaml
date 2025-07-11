@@ -8,7 +8,7 @@
 - name: Add kube-apiserver-to-kubelet.yaml
   ansible.builtin.template:
     src: kube-apiserver-to-kubelet.yaml.j2
-    dest: /tmp
+    dest: /tmp/kube-apiserver-to-kubelet.yaml
     mode: '0644'
 
 - name: Apply kube-apiserver-to-kubelet manifest to the cluster.
