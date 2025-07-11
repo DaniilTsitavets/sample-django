@@ -10,19 +10,16 @@ terraform {
 resource "local_file" "ansible_inventory" {
   content = templatefile("${path.module}/inventory.tpl", {
     control_plane = {
-      private_ip = aws_instance.k8s-hard-way-ec2-instance[1].private_ip
-      user       = "masterk8s"
+      private_ip = aws_instance.k8s-hard-way-ec2-instance[0].private_ip
     },
     workers = [
       {
         name       = "node-0"
-        private_ip = aws_instance.k8s-hard-way-ec2-instance[2].private_ip
-        user       = "worker0"
+        private_ip = aws_instance.k8s-hard-way-ec2-instance[1].private_ip
       },
       {
         name       = "node-1"
-        private_ip = aws_instance.k8s-hard-way-ec2-instance[3].private_ip
-        user       = "worker1"
+        private_ip = aws_instance.k8s-hard-way-ec2-instance[2].private_ip
       }
     ]
   })
