@@ -17,7 +17,7 @@
 - name: Create kubeconfig for kube-scheduler
   ansible.builtin.template:
     src: kubeconfig.j2
-    dest: "{{ configs_files_path }}/kube-proxy.kubeconfig"
+    dest: "{{ configs_files_path }}/kube-scheduler.kubeconfig"
     mode: '0600'
   vars:
     ca_content: "{{ ca_crt['content'] }}"

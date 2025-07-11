@@ -6,7 +6,7 @@
     mode: '0755'
 
 - name: Generate nodes kubeconfigs
-  ansible.builtin.include_tasks: nodes.yml
+  ansible.builtin.include_tasks: nodes.yaml
   vars:
     node: "{{ item }}"
   loop: "{{ groups['worker_nodes'] }}"
