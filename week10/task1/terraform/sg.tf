@@ -32,6 +32,14 @@ resource "aws_security_group" "other_nodes_sg" {
     security_groups = [aws_security_group.bastion_sg.id]
   }
 
+  ingress {
+    from_port = 6443
+    to_port   = 6443
+    protocol  = "tcp"
+    security_groups = [aws_security_group.bastion_sg.id]
+  }
+
+
   egress {
     from_port = 0
     to_port   = 0
