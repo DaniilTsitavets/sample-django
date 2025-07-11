@@ -7,7 +7,7 @@
 
 - name: Create CSR for admin cert
   community.crypto.openssl_csr:
-    path: "{{ certs_certificate_path }}/admin.csr"
+    path: "{{ certificate_path }}/admin.csr"
     privatekey_path: "{{ certificate_path }}/admin.key"
     CN: admin
     O: system:masters

@@ -7,7 +7,7 @@
 
 - name: "Create CSR for {{node}} cert"
   community.crypto.openssl_csr:
-    path: "{{ certs_certificate_path }}/{{node}}.csr"
+    path: "{{ certificate_path }}/{{node}}.csr"
     privatekey_path: "{{ certificate_path }}/{{node}}.key"
     CN: system:node:{{node}}
     O: system:nodes
