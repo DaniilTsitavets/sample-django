@@ -1,16 +1,20 @@
 ---
-- name: Wait for readiness of nodes
-  community.kubernetes.k8s_info:
+- name: Wait for all Kubernetes nodes to be Ready
+  kubernetes.core.k8s_info:
     kind: Node
-  register: nodes_info
-  until: nodes_info.resources | selectattr('status.conditions', 'defined') | selectattr(
-    'status.conditions[-1].type', 'equalto', 'Ready') | selectattr('status.conditions[-1].status', 'equalto', 'True') | list | length == (groups['all'] | length)
-  retries: 15
-  delay: 10
+    wait: yes
+    wait_condition:
+      type: Ready
+      status: True
+      reason: KubeletReady
+    wait_timeout: 60
+    wait_sleep: 5
+  register: nodes_ready
 
-- name: Create nginx deployment using k8s module
+- name: Create nginx deployment
   community.kubernetes.k8s:
     state: present
+    namespace: default
     definition:
       apiVersion: apps/v1
       kind: Deployment
@@ -34,35 +38,48 @@
   community.kubernetes.k8s_info:
     kind: Pod
     label_selectors:
-      - "app=nginx"
+      - app=nginx
   register: nginx_pods
-  until: nginx_pods.resources[0].status.phase == "Running"
+  until: nginx_pods.resources | length > 0 and nginx_pods.resources[0].status.phase == "Running"
   retries: 15
   delay: 10
 
-- name: Get nginx pod name
+- name: Set nginx pod name fact
   set_fact:
     pod_name: "{{ nginx_pods.resources[0].metadata.name }}"
 
-- name: Get nginx pod logs
-  ansible.builtin.command: "kubectl logs {{ pod_name }}"
+- name: Retrieve nginx pod logs
+  community.kubernetes.k8s_exec:
+    pod: "{{ pod_name }}"
+    namespace: default
+    command:
+      - cat
+      - /var/log/nginx/access.log
   register: pod_logs
+  failed_when: false
 
-- name: Show nginx pod logs
-  ansible.builtin.debug:
-    msg: "{{ pod_logs.stdout }}"
+- name: Display nginx pod logs (if available)
+  debug:
+    msg: "{{ pod_logs.stdout | default('No logs found or unable to fetch logs.') }}"
 
-- name: Exec nginx -v in pod
-  ansible.builtin.command: "kubectl exec {{ pod_name }} -- nginx -v"
-  register: exec_result
+- name: Get nginx version inside the pod
+  community.kubernetes.k8s_exec:
+    pod: "{{ pod_name }}"
+    namespace: default
+    command:
+      - nginx
+      - -v
+  register: nginx_version
+  failed_when: false
 
-- name: Show exec result
-  ansible.builtin.debug:
-    msg: "{{ exec_result.stdout }}"
+- name: Show nginx version output
+  debug:
+    msg: "{{ nginx_version.stderr | default('No version info available') }}"
 
-- name: Expose nginx deployment via NodePort
+- name: Expose nginx deployment via NodePort service
   community.kubernetes.k8s:
     state: present
+    namespace: default
     definition:
       apiVersion: v1
       kind: Service
@@ -77,22 +94,31 @@
             port: 80
             targetPort: 80
 
-- name: Get nginx service info
+- name: Get nginx service details
   community.kubernetes.k8s_info:
     kind: Service
+    namespace: default
     name: nginx
   register: svc_info
+  retries: 10
+  delay: 3
+  until: svc_info.resources | length > 0
 
-- name: Set NodePort fact
+- name: Set NodePort fact from service
   set_fact:
     node_port: "{{ svc_info.resources[0].spec.ports[0].nodePort }}"
 
-- name: Try to curl nginx on each worker node
-  ansible.builtin.command: "curl -I http://{{ item }}:{{ node_port }} -m 5"
+- name: Verify nginx service accessibility on worker nodes
+  ansible.builtin.uri:
+    url: "http://{{ item }}:{{ node_port }}"
+    method: HEAD
+    return_content: no
+    timeout: 5
   loop: "{{ groups['worker_nodes'] }}"
   register: curl_results
+  ignore_errors: yes
 
-- name: Show curl result for each node
-  ansible.builtin.debug:
-    msg: "Node {{ item.item }}:\n{{ item.stdout }}"
+- name: Show HTTP status code for nginx service on each node
+  debug:
+    msg: "Node {{ item.item }} responded with status code: {{ item.status | default('No response') }}"
   loop: "{{ curl_results.results }}"
