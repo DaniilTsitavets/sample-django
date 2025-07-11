@@ -18,6 +18,7 @@
     dest: "/usr/local/bin/"
     owner: root
     group: root
+    remote_src: true
     mode: '0755'
   loop: "{{ etcd_files.files }}"
   become: true
