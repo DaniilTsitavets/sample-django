@@ -2,8 +2,9 @@
 - name: Reload systemd daemon
   ansible.builtin.systemd:
     daemon_reload: yes
+  become: true
 
-- name: Enable etcd service
+- name: Enable services
   ansible.builtin.systemd:
     name: "{{ item }}"
     enabled: yes
@@ -11,8 +12,9 @@
     - containerd
     - kubelet
     - kube-proxy
+  become: true
 
-- name: Start etcd service
+- name: Start services
   ansible.builtin.systemd:
     name: "{{ item }}"
     state: started
@@ -20,3 +22,4 @@
     - containerd
     - kubelet
     - kube-proxy
+  become: true
