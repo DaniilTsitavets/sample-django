@@ -11,13 +11,16 @@
 - name: Reload systemd daemon
   ansible.builtin.systemd:
     daemon_reload: yes
+  become: true
 
 - name: Enable etcd service
   ansible.builtin.systemd:
     name: etcd
     enabled: yes
+  become: true
 
 - name: Start etcd service
   ansible.builtin.systemd:
     name: etcd
     state: started
+  become: true
