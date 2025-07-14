@@ -26,7 +26,6 @@ spec:
         kind: ResourceQuota
         name: default-resourcequota
         synchronize: true
-        namespace: production
         data:
           spec:
             hard:
@@ -46,7 +45,6 @@ spec:
         kind: LimitRange
         name: default-limitrange
         synchronize: true
-        namespace: production
         data:
           spec:
             limits:
