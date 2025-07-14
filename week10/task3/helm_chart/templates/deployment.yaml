@@ -28,8 +28,10 @@ spec:
           ports:
             - containerPort: {{ .Values.containerPort }}
           envFrom:
-            - configMapRef: {{ include "project.name" . }}-configmap
-            - secretRef: {{ include "project.name" . }}-secret
+            - configMapRef:
+                name: {{ include "project.name" . }}-configmap
+            - secretRef:
+                name: {{ include "project.name" . }}-secret
           readinessProbe:
             httpGet:
               path: /
